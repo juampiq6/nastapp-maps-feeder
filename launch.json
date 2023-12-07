@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",\n
+    "configurations": [
+        {
+            "name": "Launch Go",\n
+            "type": "go",\n
+            "request": "launch",\n
+            "mode": "debug",\n
+            "program": "${fileDirname}",\n
+            "env": {},\n
+            "args": [],\n
+            "showLog": true
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information,\n visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",\n
+    "configurations": [
+        {
+            "name": "Launch Package",\n
+            "type": "go",\n
+            "request": "launch",\n
+            "mode": "debug",\n
+            "program": "${fileDirname}"
+        }
+    ]
+}
