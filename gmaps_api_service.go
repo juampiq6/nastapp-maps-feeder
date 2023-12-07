@@ -13,9 +13,12 @@ import (
 const urlStringDiscoverPlace = "https://places.googleapis.com/v1/places:searchText"
 const urlStringPlaceDetails = "https://places.googleapis.com/v1/places/"
 
+var apiKey string
+
 // the details api call costs, so the amount of request is minimized by requesting only the places
 // that were found on the discovery call
 func makePlaceDetailCall(placeId string) []byte {
+	setApiKeyFromEnv()
 	fieldMasks := []string{
 		"id",
 		// SKU text search basic
@@ -44,7 +47,7 @@ func makePlaceDetailCall(placeId string) []byte {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("X-Goog-FieldMask", strings.Join(fieldMasks, ","))
 	// TODO: replace with env provided api key
-	req.Header.Add("X-Goog-Api-Key", "AIzaSyCkAfOkddfyMyyHERmSnkDwkujMLrnztL0")
+	req.Header.Add("X-Goog-Api-Key", apiKey)
 
 	client := http.Client{}
 	res, err := client.Do(req)
@@ -65,6 +68,7 @@ func makePlaceDetailCall(placeId string) []byte {
 // only the basic fields are requested, this way the cost of the request is zero
 // this is done only for discovery of the places inside the square
 func makeDiscoverPlacesApiCall(pointA LatLong, pointB LatLong) []byte {
+	setApiKeyFromEnv()
 	fieldMasks := []string{
 		"places.id",
 	}
@@ -101,7 +105,7 @@ func makeDiscoverPlacesApiCall(pointA LatLong, pointB LatLong) []byte {
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("X-Goog-FieldMask", strings.Join(fieldMasks, ","))
-	req.Header.Add("X-Goog-Api-Key", "AIzaSyCkAfOkddfyMyyHERmSnkDwkujMLrnztL0")
+	req.Header.Add("X-Goog-Api-Key", apiKey)
 
 	client := http.Client{}
 	res, err := client.Do(req)
@@ -118,4 +122,13 @@ func makeDiscoverPlacesApiCall(pointA LatLong, pointB LatLong) []byte {
 		fmt.Fprintf(os.Stderr, "Error %d : %s", res.StatusCode, resbody)
 	}
 	return resbody
+}
+
+func setApiKeyFromEnv() {
+	if apiKey == "" {
+		apiKey = os.Getenv("GMAPS_API_KEY")
+		if apiKey == "" {
+			panic("You must set your 'GMAPS_API_KEY' environment variable.")
+		}
+	}
 }
