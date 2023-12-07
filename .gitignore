@@ -1,1 +1,3 @@
 /.env
+/discoveredPlaces.csv
+/lastPointPair.json
